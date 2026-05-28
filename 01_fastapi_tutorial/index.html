@@ -1,0 +1,749 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Dashboard</title>
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        background: #f0f2f5;
+        color: #1a1a2e;
+        min-height: 100vh;
+      }
+
+      /* ── NAV ── */
+      nav {
+        background: #16213e;
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 2rem;
+        height: 56px;
+      }
+      nav .brand {
+        font-weight: 700;
+        font-size: 1.1rem;
+        letter-spacing: 0.5px;
+      }
+      nav .nav-links {
+        display: flex;
+        gap: 1rem;
+      }
+      nav button {
+        background: none;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        color: #fff;
+        padding: 0.35rem 0.9rem;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 0.85rem;
+        transition: background 0.15s;
+      }
+      nav button:hover {
+        background: rgba(255, 255, 255, 0.1);
+      }
+      nav button.active {
+        background: #0f3460;
+        border-color: #0f3460;
+      }
+
+      /* ── LAYOUT ── */
+      main {
+        max-width: 860px;
+        margin: 2.5rem auto;
+        padding: 0 1rem;
+      }
+
+      .card {
+        background: #fff;
+        border-radius: 12px;
+        padding: 2rem;
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+        margin-bottom: 1.5rem;
+      }
+      .card h2 {
+        margin-bottom: 1.25rem;
+        font-size: 1.2rem;
+        color: #16213e;
+      }
+
+      /* ── FORMS ── */
+      .form-group {
+        margin-bottom: 1rem;
+      }
+      .form-group label {
+        display: block;
+        font-size: 0.82rem;
+        font-weight: 600;
+        margin-bottom: 0.35rem;
+        color: #555;
+      }
+      .form-group input {
+        width: 100%;
+        padding: 0.55rem 0.8rem;
+        border: 1px solid #d1d5db;
+        border-radius: 7px;
+        font-size: 0.95rem;
+        outline: none;
+        transition: border-color 0.15s;
+      }
+      .form-group input:focus {
+        border-color: #0f3460;
+      }
+
+      .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+      }
+
+      .btn {
+        padding: 0.55rem 1.4rem;
+        border: none;
+        border-radius: 7px;
+        cursor: pointer;
+        font-size: 0.9rem;
+        font-weight: 600;
+        transition: opacity 0.15s;
+      }
+      .btn:hover {
+        opacity: 0.85;
+      }
+      .btn-primary {
+        background: #0f3460;
+        color: #fff;
+      }
+      .btn-danger {
+        background: #e53e3e;
+        color: #fff;
+      }
+      .btn-sm {
+        padding: 0.3rem 0.8rem;
+        font-size: 0.8rem;
+      }
+
+      /* ── ALERTS ── */
+      .alert {
+        padding: 0.65rem 1rem;
+        border-radius: 7px;
+        font-size: 0.88rem;
+        margin-top: 0.75rem;
+        display: none;
+      }
+      .alert.show {
+        display: block;
+      }
+      .alert-error {
+        background: #fff5f5;
+        color: #c53030;
+        border: 1px solid #fed7d7;
+      }
+      .alert-success {
+        background: #f0fff4;
+        color: #276749;
+        border: 1px solid #c6f6d5;
+      }
+
+      /* ── USERS TABLE ── */
+      .table-wrap {
+        overflow-x: auto;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.88rem;
+      }
+      thead tr {
+        background: #f7f8fa;
+      }
+      th,
+      td {
+        padding: 0.65rem 1rem;
+        text-align: left;
+        border-bottom: 1px solid #e5e7eb;
+      }
+      th {
+        font-weight: 700;
+        color: #374151;
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 0.4px;
+      }
+      tr:hover td {
+        background: #f9fafb;
+      }
+      .badge {
+        display: inline-block;
+        padding: 0.2rem 0.55rem;
+        border-radius: 999px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        background: #ebf4ff;
+        color: #1a56db;
+      }
+
+      /* ── PAGINATION ── */
+      .pagination {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-top: 1rem;
+        justify-content: flex-end;
+      }
+      .pagination button {
+        padding: 0.3rem 0.7rem;
+        border: 1px solid #d1d5db;
+        border-radius: 6px;
+        background: #fff;
+        cursor: pointer;
+        font-size: 0.85rem;
+      }
+      .pagination button:disabled {
+        opacity: 0.4;
+        cursor: default;
+      }
+      .pagination span {
+        font-size: 0.85rem;
+        color: #6b7280;
+      }
+
+      /* ── SECTION VISIBILITY ── */
+      .section {
+        display: none;
+      }
+      .section.active {
+        display: block;
+      }
+
+      /* ── MODAL ── */
+      .modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.45);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 100;
+      }
+      .modal-overlay.open {
+        display: flex;
+      }
+      .modal {
+        background: #fff;
+        border-radius: 12px;
+        padding: 2rem;
+        width: 100%;
+        max-width: 420px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
+      }
+      .modal h3 {
+        margin-bottom: 1.25rem;
+      }
+      .modal-footer {
+        display: flex;
+        justify-content: flex-end;
+        gap: 0.75rem;
+        margin-top: 1rem;
+      }
+
+      /* ── SPINNER ── */
+      .spinner {
+        display: inline-block;
+        width: 14px;
+        height: 14px;
+        border: 2px solid rgba(255, 255, 255, 0.4);
+        border-top-color: #fff;
+        border-radius: 50%;
+        animation: spin 0.6s linear infinite;
+        vertical-align: middle;
+        margin-right: 0.4rem;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <span class="brand">User Dashboard</span>
+      <div class="nav-links" id="navLinks">
+        <button
+          onclick="showSection('loginSection')"
+          id="navLogin"
+          class="active"
+        >
+          Login
+        </button>
+        <button onclick="showSection('registerSection')" id="navRegister">
+          Register
+        </button>
+      </div>
+    </nav>
+
+    <main>
+      <!-- ── LOGIN ── -->
+      <div class="section active" id="loginSection">
+        <div class="card">
+          <h2>Sign In</h2>
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" id="loginEmail" placeholder="you@example.com" />
+          </div>
+          <div class="form-group">
+            <label>Password</label>
+            <input type="password" id="loginPassword" placeholder="••••••••" />
+          </div>
+          <button class="btn btn-primary" onclick="login()" id="loginBtn">
+            Sign In
+          </button>
+          <div class="alert" id="loginAlert"></div>
+        </div>
+      </div>
+
+      <!-- ── REGISTER ── -->
+      <div class="section" id="registerSection">
+        <div class="card">
+          <h2>Create Account</h2>
+          <div class="form-row">
+            <div class="form-group">
+              <label>First Name</label>
+              <input type="text" id="regFirstName" placeholder="John" />
+            </div>
+            <div class="form-group">
+              <label>Last Name</label>
+              <input type="text" id="regLastName" placeholder="Doe" />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Email</label>
+              <input type="email" id="regEmail" placeholder="you@example.com" />
+            </div>
+            <div class="form-group">
+              <label>Mobile Number</label>
+              <input type="tel" id="regMobile" placeholder="+91 9999999999" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Password</label>
+            <input type="password" id="regPassword" placeholder="••••••••" />
+          </div>
+          <details style="margin-bottom: 1rem">
+            <summary
+              style="
+                cursor: pointer;
+                font-size: 0.85rem;
+                color: #0f3460;
+                font-weight: 600;
+              "
+            >
+              + Add Address (optional)
+            </summary>
+            <div style="margin-top: 0.75rem">
+              <div class="form-group">
+                <label>Street</label
+                ><input type="text" id="regStreet" placeholder="123 Main St" />
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>City</label
+                  ><input type="text" id="regCity" placeholder="Mumbai" />
+                </div>
+                <div class="form-group">
+                  <label>State</label
+                  ><input type="text" id="regState" placeholder="Maharashtra" />
+                </div>
+              </div>
+              <div class="form-group">
+                <label>ZIP Code</label
+                ><input type="text" id="regZip" placeholder="400001" />
+              </div>
+            </div>
+          </details>
+          <button class="btn btn-primary" onclick="register()" id="registerBtn">
+            Create Account
+          </button>
+          <div class="alert" id="registerAlert"></div>
+        </div>
+      </div>
+
+      <!-- ── DASHBOARD ── -->
+      <div class="section" id="dashboardSection">
+        <div
+          class="card"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1.25rem 2rem;
+          "
+        >
+          <div>
+            <div style="font-size: 0.8rem; color: #6b7280">Logged in as</div>
+            <div style="font-weight: 700; font-size: 1rem" id="userEmailLabel">
+              —
+            </div>
+          </div>
+          <div style="display: flex; gap: 0.75rem">
+            <button class="btn btn-primary btn-sm" onclick="openResetModal()">
+              Reset Password
+            </button>
+            <button class="btn btn-danger btn-sm" onclick="logout()">
+              Logout
+            </button>
+          </div>
+        </div>
+
+        <div class="card">
+          <div
+            style="
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+              margin-bottom: 1rem;
+            "
+          >
+            <h2 style="margin: 0">All Users</h2>
+            <button class="btn btn-primary btn-sm" onclick="loadUsers()">
+              ↻ Refresh
+            </button>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Mobile</th>
+                  <th>City</th>
+                  <th>Created</th>
+                </tr>
+              </thead>
+              <tbody id="usersTableBody">
+                <tr>
+                  <td colspan="5" style="text-align: center; color: #9ca3af">
+                    Loading…
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="pagination">
+            <button id="prevBtn" onclick="changePage(-1)" disabled>
+              ← Prev
+            </button>
+            <span id="pageLabel">Page 1</span>
+            <button id="nextBtn" onclick="changePage(1)">Next →</button>
+          </div>
+          <div class="alert" id="usersAlert"></div>
+        </div>
+      </div>
+    </main>
+
+    <!-- ── RESET PASSWORD MODAL ── -->
+    <div class="modal-overlay" id="resetModal">
+      <div class="modal">
+        <h3>Reset Password</h3>
+        <div class="form-group">
+          <label>Current Password</label>
+          <input type="password" id="oldPassword" placeholder="••••••••" />
+        </div>
+        <div class="form-group">
+          <label>New Password</label>
+          <input type="password" id="newPassword" placeholder="••••••••" />
+        </div>
+        <div class="alert" id="resetAlert"></div>
+        <div class="modal-footer">
+          <button
+            class="btn"
+            style="background: #f3f4f6; color: #374151"
+            onclick="closeResetModal()"
+          >
+            Cancel
+          </button>
+          <button
+            class="btn btn-primary"
+            onclick="resetPassword()"
+            id="resetBtn"
+          >
+            Update Password
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const API = "http://127.0.0.1:8000";
+      let token = localStorage.getItem("token") || null;
+      let currentUserEmail = localStorage.getItem("userEmail") || null;
+      let currentUserId = localStorage.getItem("userId") || null;
+      let currentPage = 1;
+      const PAGE_SIZE = 10;
+
+      // ── Boot ──
+      if (token) restoreSession();
+
+      function restoreSession() {
+        showSection("dashboardSection");
+        document.getElementById("userEmailLabel").textContent =
+          currentUserEmail || "—";
+        loadUsers();
+        updateNav(true);
+      }
+
+      // ── Nav ──
+      function updateNav(loggedIn) {
+        const nav = document.getElementById("navLinks");
+        if (loggedIn) {
+          nav.innerHTML = "";
+        } else {
+          nav.innerHTML = `
+        <button onclick="showSection('loginSection')" id="navLogin">Login</button>
+        <button onclick="showSection('registerSection')" id="navRegister">Register</button>`;
+        }
+      }
+
+      function showSection(id) {
+        document
+          .querySelectorAll(".section")
+          .forEach((s) => s.classList.remove("active"));
+        document.getElementById(id).classList.add("active");
+        document
+          .querySelectorAll("nav button")
+          .forEach((b) => b.classList.remove("active"));
+        const map = {
+          loginSection: "navLogin",
+          registerSection: "navRegister",
+        };
+        if (map[id]) document.getElementById(map[id])?.classList.add("active");
+      }
+
+      // ── Alert helpers ──
+      function showAlert(id, msg, type = "error") {
+        const el = document.getElementById(id);
+        el.textContent = msg;
+        el.className = `alert alert-${type} show`;
+      }
+      function clearAlert(id) {
+        const el = document.getElementById(id);
+        el.className = "alert";
+        el.textContent = "";
+      }
+
+      // ── Spinner helpers ──
+      function setLoading(btnId, loading, label) {
+        const btn = document.getElementById(btnId);
+        btn.disabled = loading;
+        btn.innerHTML = loading
+          ? `<span class="spinner"></span>${label}`
+          : label;
+      }
+
+      // ── Register ──
+      async function register() {
+        clearAlert("registerAlert");
+        const body = {
+          first_name: document.getElementById("regFirstName").value.trim(),
+          last_name: document.getElementById("regLastName").value.trim(),
+          email: document.getElementById("regEmail").value.trim(),
+          mobile_number: document.getElementById("regMobile").value.trim(),
+          password: document.getElementById("regPassword").value,
+        };
+        const street = document.getElementById("regStreet").value.trim();
+        if (street) {
+          body.address = {
+            street,
+            city: document.getElementById("regCity").value.trim(),
+            state: document.getElementById("regState").value.trim(),
+            zip_code: document.getElementById("regZip").value.trim(),
+          };
+        }
+        if (!body.first_name || !body.email || !body.password) {
+          return showAlert(
+            "registerAlert",
+            "First name, email, and password are required.",
+          );
+        }
+        setLoading("registerBtn", true, "Creating…");
+        try {
+          const res = await fetch(`${API}/v1/users`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(body),
+          });
+          const data = await res.json();
+          if (!res.ok) throw new Error(data.detail || "Registration failed.");
+          saveSession(data);
+          showAlert(
+            "registerAlert",
+            "Account created! Redirecting…",
+            "success",
+          );
+          setTimeout(restoreSession, 800);
+        } catch (e) {
+          showAlert("registerAlert", e.message);
+        } finally {
+          setLoading("registerBtn", false, "Create Account");
+        }
+      }
+
+      // ── Login ──
+      async function login() {
+        clearAlert("loginAlert");
+        const email = document.getElementById("loginEmail").value.trim();
+        const password = document.getElementById("loginPassword").value;
+        if (!email || !password)
+          return showAlert("loginAlert", "Email and password are required.");
+        setLoading("loginBtn", true, "Signing in…");
+        try {
+          const res = await fetch(`${API}/v1/login`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, password }),
+          });
+          const data = await res.json();
+          if (!res.ok) throw new Error(data.detail || "Login failed.");
+          saveSession(data);
+          restoreSession();
+        } catch (e) {
+          showAlert("loginAlert", e.message);
+        } finally {
+          setLoading("loginBtn", false, "Sign In");
+        }
+      }
+
+      function saveSession(data) {
+        token = data.access_token;
+        currentUserEmail = data.email;
+        currentUserId = data.id;
+        localStorage.setItem("token", token);
+        localStorage.setItem("userEmail", currentUserEmail);
+        localStorage.setItem("userId", currentUserId);
+      }
+
+      function logout() {
+        token = null;
+        currentUserEmail = null;
+        currentUserId = null;
+        localStorage.clear();
+        updateNav(false);
+        showSection("loginSection");
+      }
+
+      // ── Users list ──
+      async function loadUsers() {
+        clearAlert("usersAlert");
+        document.getElementById("usersTableBody").innerHTML =
+          '<tr><td colspan="5" style="text-align:center;color:#9ca3af;">Loading…</td></tr>';
+        try {
+          const res = await fetch(
+            `${API}/v1/users?page=${currentPage}&page_size=${PAGE_SIZE}`,
+            {
+              headers: { Authorization: `Bearer ${token}` },
+            },
+          );
+          if (res.status === 401) {
+            logout();
+            return;
+          }
+          const data = await res.json();
+          if (!res.ok) throw new Error(data.detail || "Failed to load users.");
+          renderUsers(data);
+          document.getElementById("pageLabel").textContent =
+            `Page ${currentPage}`;
+          document.getElementById("prevBtn").disabled = currentPage === 1;
+          document.getElementById("nextBtn").disabled = data.length < PAGE_SIZE;
+        } catch (e) {
+          showAlert("usersAlert", e.message);
+          document.getElementById("usersTableBody").innerHTML =
+            '<tr><td colspan="5" style="text-align:center;color:#e53e3e;">Failed to load.</td></tr>';
+        }
+      }
+
+      function renderUsers(users) {
+        const tbody = document.getElementById("usersTableBody");
+        if (!users.length) {
+          tbody.innerHTML =
+            '<tr><td colspan="5" style="text-align:center;color:#9ca3af;">No users found.</td></tr>';
+          return;
+        }
+        tbody.innerHTML = users
+          .map(
+            (u) => `
+      <tr>
+        <td><strong>${esc(u.first_name)} ${esc(u.last_name)}</strong></td>
+        <td>${esc(u.email)}</td>
+        <td>${esc(u.mobile_number || "—")}</td>
+        <td>${esc(u.address?.city || "—")}</td>
+        <td style="color:#6b7280;font-size:.82rem;">${esc(u.created_at?.slice(0, 10) || "—")}</td>
+      </tr>`,
+          )
+          .join("");
+      }
+
+      function changePage(delta) {
+        currentPage = Math.max(1, currentPage + delta);
+        loadUsers();
+      }
+
+      // ── Reset password ──
+      function openResetModal() {
+        clearAlert("resetAlert");
+        document.getElementById("oldPassword").value = "";
+        document.getElementById("newPassword").value = "";
+        document.getElementById("resetModal").classList.add("open");
+      }
+      function closeResetModal() {
+        document.getElementById("resetModal").classList.remove("open");
+      }
+
+      async function resetPassword() {
+        clearAlert("resetAlert");
+        const old_password = document.getElementById("oldPassword").value;
+        const new_password = document.getElementById("newPassword").value;
+        if (!old_password || !new_password)
+          return showAlert("resetAlert", "Both fields are required.");
+        setLoading("resetBtn", true, "Updating…");
+        try {
+          const res = await fetch(`${API}/v1/reset-password`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({ old_password, new_password }),
+          });
+          const data = await res.json();
+          if (!res.ok)
+            throw new Error(data.detail || "Failed to reset password.");
+          showAlert("resetAlert", "Password updated successfully!", "success");
+          setTimeout(closeResetModal, 1200);
+        } catch (e) {
+          showAlert("resetAlert", e.message);
+        } finally {
+          setLoading("resetBtn", false, "Update Password");
+        }
+      }
+
+      // ── XSS-safe escape ──
+      function esc(str) {
+        return String(str ?? "")
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;");
+      }
+    </script>
+  </body>
+</html>
