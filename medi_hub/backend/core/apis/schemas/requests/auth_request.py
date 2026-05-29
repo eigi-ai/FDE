@@ -57,3 +57,15 @@ class UserCreateRequest(BaseModel):
     password: str = Field(..., description="Plaintext password for the user")
     mobile_number: str = Field(..., description="User's mobile phone number")
     user_address: UserAddress = Field(..., description="User's address information")
+
+
+class UserLoginRequest(BaseModel):
+    """Represents the data required for a user to log in.
+
+    Attributes:
+        email: The email address of the user attempting to log in.
+        password: The plaintext password provided by the user for authentication.
+    """
+
+    email: EmailStr = Field(..., description="User's email address")
+    password: str = Field(..., description="Plaintext password for authentication")
