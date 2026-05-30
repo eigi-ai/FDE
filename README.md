@@ -30,6 +30,10 @@ fundamental_of_programming/
     02_python_backend_basics.py
     03_api_calls_sdk_async.py
   04_fastapi_basics/
+databases/
+  nosql/
+    mongodb/
+      README.md
 ```
 
 ## What Each Module Covers
@@ -38,6 +42,7 @@ fundamental_of_programming/
 - `02_exercise_two`: Object-Oriented Programming in Python, including class, object, constructor, self, encapsulation, inheritance, polymorphism, and abstraction.
 - `03_exercise_three`: API fundamentals before FastAPI, including HTTP basics, JSON, headers, status codes, detailed Python exception handling, imports, backend-to-backend communication, webhooks, cURL, sync vs async, and SDK concepts.
 - `04_fastapi_basics`: placeholder for the next stage of training, where FastAPI concepts will be introduced after the foundations are complete.
+- `databases/nosql/mongodb`: MongoDB basics for freshers, including NoSQL concepts, CRUD operations, PyMongo vs Motor, async usage, indexes, aggregation, ObjectId, DBRef, and Motor agnostic classes.
 
 ## Why This Module Exists
 
@@ -74,6 +79,8 @@ python3 fundamental_of_programming/03_exercise_three/02_python_backend_basics.py
 python3 fundamental_of_programming/03_exercise_three/03_api_calls_sdk_async.py
 ```
 
+Database tutorials are documentation-first modules and can be read directly from their README files.
+
 ## Training Flow
 
 The intended learning path is:
@@ -81,7 +88,8 @@ The intended learning path is:
 1. Start with core Python logic and data handling.
 2. Move into Object-Oriented Programming.
 3. Learn API and backend fundamentals before FastAPI.
-4. Then begin FastAPI training.
+4. Learn database basics, starting with MongoDB.
+5. Then begin FastAPI training.
 
 ## Notes
 
