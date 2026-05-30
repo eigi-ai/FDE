@@ -1,0 +1,427 @@
+{
+  "info": {
+    "_postman_id": "4f4d67d3-3f3a-4fd7-a5a6-6b989801ba18",
+    "name": "Medi Hub API",
+    "description": "Postman collection for the Medi Hub FastAPI backend. Includes health, authentication, OTP, and user management APIs.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Health",
+      "item": [
+        {
+          "name": "Ping",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/",
+              "host": ["{{baseUrl}}"],
+              "path": [""]
+            },
+            "description": "Health-check endpoint for the backend."
+          },
+          "response": []
+        },
+        {
+          "name": "Set Cookie",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/set-cookie",
+              "host": ["{{baseUrl}}"],
+              "path": ["set-cookie"]
+            },
+            "description": "Example cookie-setting endpoint."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Signup",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code >= 200 && pm.response.code < 300) {",
+                  "  let response = {};",
+                  "  try { response = pm.response.json(); } catch (error) {}",
+                  "  if (response.user && response.user.access_token) {",
+                  "    pm.collectionVariables.set('accessToken', response.user.access_token);",
+                  "  }",
+                  "  if (response.user && response.user.id) {",
+                  "    pm.collectionVariables.set('userId', response.user.id);",
+                  "  }",
+                  "  if (response.user && response.user.user_role === 'ADMIN' && response.user.access_token) {",
+                  "    pm.collectionVariables.set('adminAccessToken', response.user.access_token);",
+                  "  }",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"first_name\": \"Mrunmay\",\n  \"last_name\": \"Chichkhede\",\n  \"email\": \"mchichkhede2002@gmail.com\",\n  \"password\": \"P@ssw0rd\",\n  \"mobile_number\": \"9156685436\",\n  \"user_address\": {\n    \"street\": \"Mahuli road\",\n    \"city\": \"Ramtek\",\n    \"state\": \"Maharashtra\",\n    \"postal_code\": \"441401\",\n    \"country\": \"India\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/v1/auth/signup",
+              "host": ["{{baseUrl}}"],
+              "path": ["v1", "auth", "signup"]
+            },
+            "description": "Register a new user and capture the returned access token and user ID into collection variables."
+          },
+          "response": []
+        },
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code >= 200 && pm.response.code < 300) {",
+                  "  let response = {};",
+                  "  try { response = pm.response.json(); } catch (error) {}",
+                  "  if (response.user && response.user.access_token) {",
+                  "    pm.collectionVariables.set('accessToken', response.user.access_token);",
+                  "  }",
+                  "  if (response.user && response.user.id) {",
+                  "    pm.collectionVariables.set('userId', response.user.id);",
+                  "  }",
+                  "  if (response.user && response.user.user_role === 'ADMIN' && response.user.access_token) {",
+                  "    pm.collectionVariables.set('adminAccessToken', response.user.access_token);",
+                  "  }",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"mchichkhede2002@gmail.com\",\n  \"password\": \"P@ssw0rd\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/v1/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["v1", "auth", "login"]
+            },
+            "description": "Login with email and password. Stores access token and user ID into collection variables."
+          },
+          "response": []
+        },
+        {
+          "name": "Request OTP",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"mchichkhede2002@gmail.com\",\n  \"purpose\": \"LOGIN\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/v1/auth/request-otp",
+              "host": ["{{baseUrl}}"],
+              "path": ["v1", "auth", "request-otp"]
+            },
+            "description": "Request an email OTP for LOGIN or FORGOT_PASSWORD flows."
+          },
+          "response": []
+        },
+        {
+          "name": "Verify OTP",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code >= 200 && pm.response.code < 300) {",
+                  "  let response = {};",
+                  "  try { response = pm.response.json(); } catch (error) {}",
+                  "  if (response.user && response.user.access_token) {",
+                  "    pm.collectionVariables.set('accessToken', response.user.access_token);",
+                  "  }",
+                  "  if (response.user && response.user.id) {",
+                  "    pm.collectionVariables.set('userId', response.user.id);",
+                  "  }",
+                  "  if (response.user && response.user.user_role === 'ADMIN' && response.user.access_token) {",
+                  "    pm.collectionVariables.set('adminAccessToken', response.user.access_token);",
+                  "  }",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"mchichkhede2002@gmail.com\",\n  \"otp\": \"123456\",\n  \"purpose\": \"LOGIN\",\n  \"new_password\": \"NewP@ssw0rd123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/v1/auth/verify-otp",
+              "host": ["{{baseUrl}}"],
+              "path": ["v1", "auth", "verify-otp"]
+            },
+            "description": "Verify OTP for LOGIN or FORGOT_PASSWORD. For LOGIN, ignore new_password. For FORGOT_PASSWORD, set purpose to FORGOT_PASSWORD and provide new_password."
+          },
+          "response": []
+        },
+        {
+          "name": "Reset Password",
+          "request": {
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"old_password\": \"P@ssw0rd\",\n  \"new_password\": \"NewP@ssw0rd123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/v1/auth/reset-password",
+              "host": ["{{baseUrl}}"],
+              "path": ["v1", "auth", "reset-password"]
+            },
+            "description": "Reset password for the currently authenticated user using a bearer token."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "User Management",
+      "item": [
+        {
+          "name": "Get All Users",
+          "request": {
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{adminAccessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/users",
+              "host": ["{{baseUrl}}"],
+              "path": ["v1", "users"]
+            },
+            "description": "Fetch all users. This endpoint requires an ADMIN token."
+          },
+          "response": []
+        },
+        {
+          "name": "Get User By ID",
+          "request": {
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v1/users/{{userId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["v1", "users", "{{userId}}"]
+            },
+            "description": "Fetch a user by ID. Allowed for the same user or an ADMIN token."
+          },
+          "response": []
+        },
+        {
+          "name": "Update User By ID",
+          "request": {
+            "method": "PATCH",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{adminAccessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"first_name\": \"Updated\",\n  \"last_name\": \"User\",\n  \"mobile_number\": \"9876543210\",\n  \"user_address\": {\n    \"street\": \"New Street\",\n    \"city\": \"Nagpur\",\n    \"state\": \"Maharashtra\",\n    \"postal_code\": \"440001\",\n    \"country\": \"India\"\n  },\n  \"user_role\": \"USER\",\n  \"password\": \"P@ssw0rd123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/v1/users/{{userId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["v1", "users", "{{userId}}"]
+            },
+            "description": "Update a user by ID. This endpoint requires an ADMIN token."
+          },
+          "response": []
+        },
+        {
+          "name": "Update User Profile",
+          "request": {
+            "method": "PATCH",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"first_name\": \"Mrunmay\",\n  \"last_name\": \"Chichkhede\",\n  \"mobile_number\": \"9156685436\",\n  \"user_address\": {\n    \"street\": \"Mahuli road\",\n    \"city\": \"Ramtek\",\n    \"state\": \"Maharashtra\",\n    \"postal_code\": \"441401\",\n    \"country\": \"India\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/v1/users/{{userId}}/profile",
+              "host": ["{{baseUrl}}"],
+              "path": ["v1", "users", "{{userId}}", "profile"]
+            },
+            "description": "Update the profile for the same user or with an ADMIN token."
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5100"
+    },
+    {
+      "key": "accessToken",
+      "value": ""
+    },
+    {
+      "key": "adminAccessToken",
+      "value": ""
+    },
+    {
+      "key": "userId",
+      "value": ""
+    }
+  ]
+}
