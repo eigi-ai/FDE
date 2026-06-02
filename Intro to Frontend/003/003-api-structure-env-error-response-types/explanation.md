@@ -9,6 +9,7 @@ Core idea:
 ```text
 page component handles UI
 service file handles API request
+Axios client handles common request config
 types describe API data
 env variables configure the API URL
 ```
@@ -40,6 +41,49 @@ src/
     api-lab/
       ApiLabPage.tsx
 ```
+
+## What Is Axios?
+
+Axios is a popular JavaScript library for making HTTP requests.
+
+Install it:
+
+```bash
+npm install axios
+```
+
+You can call APIs with `fetch` or Axios.
+
+With `fetch`:
+
+```ts
+const response = await fetch("/api/candidates");
+
+if (!response.ok) {
+  throw new Error("Request failed");
+}
+
+const data = await response.json();
+```
+
+With Axios:
+
+```ts
+const response = await axios.get("/api/candidates");
+const data = response.data;
+```
+
+Beginner-friendly difference:
+
+```text
+fetch gives you a Response object.
+You manually check response.ok and parse response.json().
+
+Axios gives you response.data.
+Axios rejects failed status codes like 404 and 500 by default.
+```
+
+Axios does not remove the need for good structure. You should still keep API logic in service files.
 
 ## Vite Env Variables
 
@@ -78,19 +122,39 @@ Do not put private secrets in frontend env files.
 
 ## API Client
 
-Create one reusable client for common request behavior.
+Create one reusable Axios client for common request behavior.
 
 ```ts
+import axios from "axios";
+
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+const API_KEY = import.meta.env.VITE_API_KEY;
+
+export const apiClient = axios.create({
+  baseURL: API_BASE_URL,
+  headers: API_KEY
+    ? {
+        "X-Api-Key": API_KEY,
+      }
+    : {},
+});
 
 export async function apiGet<T>(path: string): Promise<T> {
-  const response = await fetch(`${API_BASE_URL}${path}`);
+  try {
+    const response = await apiClient.get<T>(path);
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const status = error.response?.status;
+      const message = status
+        ? `Request failed with status ${status}`
+        : "Request failed before the server responded.";
 
-  if (!response.ok) {
-    throw new Error(`Request failed with status ${response.status}`);
+      throw new Error(message);
+    }
+
+    throw error;
   }
-
-  return response.json() as Promise<T>;
 }
 ```
 
@@ -98,8 +162,9 @@ What this does:
 
 - builds full API URL
 - sends request
-- checks failed status codes
-- parses JSON
+- uses shared headers
+- handles failed Axios requests
+- returns `response.data`
 - returns typed data
 
 ## Response Types
@@ -177,9 +242,24 @@ try {
 }
 ```
 
+## Where Axios Should Live
+
+Good:
+
+```text
+Page component -> candidateService.ts -> apiClient.ts -> Axios
+```
+
+Avoid:
+
+```text
+Page component -> Axios directly everywhere
+```
+
+If every page imports Axios directly, API logic becomes scattered.
+
 ## Key Line
 
 ```text
-API service files keep network logic separate from UI logic.
+API service files keep network logic separate from UI logic, and Axios keeps request code cleaner than raw fetch.
 ```
-
