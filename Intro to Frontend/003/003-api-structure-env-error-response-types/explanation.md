@@ -44,12 +44,84 @@ src/
 
 ## What Is Axios?
 
-Axios is a popular JavaScript library for making HTTP requests.
+Axios is a JavaScript HTTP client.
+
+That means:
+
+```text
+Axios helps your frontend send requests to APIs and receive responses.
+```
+
+Axios is not a backend.
+
+Axios is not an API.
+
+Axios is not a database.
+
+Axios is a helper library you use inside your React app when you need to talk to another server.
+
+Example:
+
+```text
+React app needs candidate data
+-> Axios sends request to API
+-> API sends response
+-> Axios gives data back to React
+-> React updates the UI
+```
 
 Install it:
 
 ```bash
 npm install axios
+```
+
+## How Axios Works
+
+When you write:
+
+```ts
+const response = await axios.get("/api/candidates");
+```
+
+this means:
+
+```text
+Send a GET request to /api/candidates.
+Wait for the API response.
+Store the Axios response object in response.
+```
+
+The Axios response object usually contains:
+
+```ts
+response.data; // response body
+response.status; // HTTP status code, such as 200 or 404
+response.headers; // response headers
+```
+
+Most of the time in frontend work, you mainly use:
+
+```ts
+response.data;
+```
+
+because that is the actual JSON data your UI needs to render.
+
+## Axios Request Flow In React
+
+Use this mental model:
+
+```text
+user clicks button
+-> event handler runs
+-> page calls service function
+-> service function calls Axios
+-> Axios sends request
+-> API returns response
+-> Axios gives response.data
+-> React state updates
+-> UI re-renders
 ```
 
 You can call APIs with `fetch` or Axios.
@@ -84,6 +156,74 @@ Axios rejects failed status codes like 404 and 500 by default.
 ```
 
 Axios does not remove the need for good structure. You should still keep API logic in service files.
+
+## Common Axios Methods
+
+Use `get` to read data:
+
+```ts
+const response = await axios.get("/api/candidates");
+```
+
+Use `post` to create data:
+
+```ts
+const response = await axios.post("/api/candidates", {
+  name: "Asha",
+  role: "Frontend Developer",
+});
+```
+
+Use `put` to replace or update data:
+
+```ts
+const response = await axios.put("/api/candidates/123", {
+  status: "interview",
+});
+```
+
+Use `delete` to delete data:
+
+```ts
+await axios.delete("/api/candidates/123");
+```
+
+## Query Params With Axios
+
+For URLs like:
+
+```text
+/api/candidates?status=interview&page=1
+```
+
+write:
+
+```ts
+const response = await axios.get("/api/candidates", {
+  params: {
+    status: "interview",
+    page: 1,
+  },
+});
+```
+
+Axios turns `params` into query parameters.
+
+## Headers With Axios
+
+Some APIs need headers.
+
+Example:
+
+```ts
+const response = await axios.get("/api/candidates", {
+  headers: {
+    "X-Api-Key": "demo-key",
+  },
+});
+```
+
+But do not repeat headers in every component. Put shared headers in an Axios client.
 
 ## Vite Env Variables
 
