@@ -1,0 +1,9 @@
+{
+  "source": "mock-api.json",
+  "message": "This response came from a local file through fetch.",
+  "items": [
+    { "id": 1, "label": "Request sent" },
+    { "id": 2, "label": "Response parsed" },
+    { "id": 3, "label": "State updated" }
+  ]
+}
