@@ -153,11 +153,24 @@ Show remotes:
 git remote -v
 ```
 
+This shows the remote repositories connected to your local repository.
+
+Example output:
+
+```text
+origin  https://github.com/username/repo.git (fetch)
+origin  https://github.com/username/repo.git (push)
+```
+
 Add origin:
 
 ```bash
 git remote add origin https://github.com/username/repo.git
 ```
+
+This connects your local repository to a GitHub repository and gives that remote the nickname `origin`.
+
+Use this when you created a local repo first and now want to connect it to GitHub.
 
 Change origin URL:
 
@@ -165,11 +178,19 @@ Change origin URL:
 git remote set-url origin https://github.com/username/new-repo.git
 ```
 
+This changes where `origin` points.
+
+Use this if the GitHub repository URL changed, or if you connected to the wrong remote URL earlier.
+
 Remove origin:
 
 ```bash
 git remote remove origin
 ```
+
+This removes the remote named `origin` from your local repository.
+
+It does not delete the GitHub repository. It only removes the connection from your local Git config.
 
 Fetch from origin:
 
@@ -177,15 +198,22 @@ Fetch from origin:
 git fetch origin
 ```
 
+This asks GitHub for the latest branch and commit information from `origin`.
+
+It updates remote-tracking branches like `origin/main`, but it does not directly change your working files.
+
 Push current branch:
 
 ```bash
 git push origin main
 ```
 
+This sends commits from your local `main` branch to the `main` branch on the remote named `origin`.
+
+Use this when you want your committed local work to appear on GitHub.
+
 ## Key Line
 
 ```text
 origin is the remote nickname. origin/main is your local tracking reference for GitHub's main branch.
 ```
-
