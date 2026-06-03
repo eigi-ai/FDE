@@ -34,6 +34,12 @@ databases/
   nosql/
     mongodb/
       README.md
+genai/
+  README.md
+  01_genai_basics.md
+  02_how_genai_works.md
+  03_genai_use_cases.md
+  04_prompting_safety_and_evaluation.md
 ```
 
 ## What Each Module Covers
@@ -43,6 +49,7 @@ databases/
 - `03_exercise_three`: API fundamentals before FastAPI, including HTTP basics, JSON, headers, status codes, detailed Python exception handling, imports, backend-to-backend communication, webhooks, cURL, sync vs async, and SDK concepts.
 - `04_fastapi_basics`: placeholder for the next stage of training, where FastAPI concepts will be introduced after the foundations are complete.
 - `databases/nosql/mongodb`: MongoDB basics for freshers, including NoSQL concepts, CRUD operations, PyMongo vs Motor, async usage, indexes, aggregation, ObjectId, DBRef, and Motor agnostic classes.
+- `genai`: beginner-friendly Generative AI theory module covering what GenAI is, how it works, prompts, tokens, RAG, agents, use cases, risks, and responsible usage.
 
 ## Why This Module Exists
 
@@ -53,6 +60,7 @@ FDE journey:
 - structured problem solving
 - Python basics for backend systems
 - API understanding
+- Generative AI understanding
 - system-to-system communication concepts
 - readiness for FastAPI and integration workflows
 
@@ -79,7 +87,7 @@ python3 fundamental_of_programming/03_exercise_three/02_python_backend_basics.py
 python3 fundamental_of_programming/03_exercise_three/03_api_calls_sdk_async.py
 ```
 
-Database tutorials are documentation-first modules and can be read directly from their README files.
+Database and GenAI tutorials are documentation-first modules and can be read directly from their README files.
 
 ## Training Flow
 
@@ -89,10 +97,12 @@ The intended learning path is:
 2. Move into Object-Oriented Programming.
 3. Learn API and backend fundamentals before FastAPI.
 4. Learn database basics, starting with MongoDB.
-5. Then begin FastAPI training.
+5. Learn Generative AI basics and responsible usage.
+6. Then begin FastAPI training.
 
 ## Notes
 
 - Generated Python cache files are ignored through `.gitignore`.
 - Local virtual environments are also ignored.
 - Exercise 4 is intentionally kept as the next learning stage placeholder.
+- The `genai` folder is a documentation-first beginner module.
