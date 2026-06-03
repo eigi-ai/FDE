@@ -36,10 +36,14 @@ databases/
       README.md
 genai/
   README.md
-  01_genai_basics.md
-  02_how_genai_works.md
-  03_genai_use_cases.md
-  04_prompting_safety_and_evaluation.md
+  01_basics_of_genai/
+    README.md
+    01_genai_basics.md
+    02_how_genai_works.md
+    03_genai_use_cases.md
+    04_prompting_safety_and_evaluation.md
+  02_genai_application_fundamentals/
+    README.md
 ```
 
 ## What Each Module Covers
@@ -49,7 +53,7 @@ genai/
 - `03_exercise_three`: API fundamentals before FastAPI, including HTTP basics, JSON, headers, status codes, detailed Python exception handling, imports, backend-to-backend communication, webhooks, cURL, sync vs async, and SDK concepts.
 - `04_fastapi_basics`: placeholder for the next stage of training, where FastAPI concepts will be introduced after the foundations are complete.
 - `databases/nosql/mongodb`: MongoDB basics for freshers, including NoSQL concepts, CRUD operations, PyMongo vs Motor, async usage, indexes, aggregation, ObjectId, DBRef, and Motor agnostic classes.
-- `genai`: beginner-friendly Generative AI theory module covering what GenAI is, how it works, prompts, tokens, RAG, agents, use cases, risks, and responsible usage.
+- `genai`: beginner-friendly Generative AI module split into basics and future application-fundamentals sections, covering what GenAI is, how it works, prompts, tokens, RAG, agents, use cases, risks, and later topics such as tools, context, and chat completion APIs.
 
 ## Why This Module Exists
 
@@ -105,4 +109,4 @@ The intended learning path is:
 - Generated Python cache files are ignored through `.gitignore`.
 - Local virtual environments are also ignored.
 - Exercise 4 is intentionally kept as the next learning stage placeholder.
-- The `genai` folder is a documentation-first beginner module.
+- The `genai` folder is a documentation-first beginner module with subfolders for basics and later application-fundamentals topics.

@@ -8,7 +8,7 @@ create new content such as text, images, audio, video, and code.
 
 ## How To Read This Module
 
-Each topic is split into a separate chapter file.
+This module is now split into folders so the learning path stays organized.
 
 Recommended way to learn:
 
@@ -17,23 +17,29 @@ Recommended way to learn:
 3. Focus first on ideas, not model names.
 4. Revisit prompts, RAG, and safety after understanding the basics.
 
-## Learning Order
+## Folder Structure
 
-1. `01_genai_basics.md`
-   Learn what Generative AI is, how it differs from traditional AI, and the
-   main kinds of content it can generate.
+1. `01_basics_of_genai/`
+   This folder contains the beginner theory lessons for Generative AI.
 
-2. `02_how_genai_works.md`
-   Learn the simple idea behind training, inference, prompts, tokens,
-   embeddings, fine-tuning, RAG, and agents.
+   Learning order inside this folder:
+   - `01_genai_basics.md`
+   - `02_how_genai_works.md`
+   - `03_genai_use_cases.md`
+   - `04_prompting_safety_and_evaluation.md`
 
-3. `03_genai_use_cases.md`
-   Learn where Generative AI is used in real products, teams, and business
-   workflows.
+2. `02_genai_application_fundamentals/`
+   This folder is reserved for the next stage of learning, where practical LLM
+   application concepts will be added.
 
-4. `04_prompting_safety_and_evaluation.md`
-   Learn how to write better prompts, how to verify AI output, and the main
-   risks and best practices.
+   Planned topics include:
+   - tools
+   - system prompts
+   - system instructions
+   - context
+   - chat completion APIs
+   - tool calling
+   - application flow
 
 ## Important Terms
 
@@ -67,6 +73,7 @@ Recommended way to learn:
 - real-world use cases
 - limitations and risks
 - safety and verification basics
+- GenAI application fundamentals such as tools, prompts, context, and chat APIs
 
 ## Beginner Notes
 
@@ -75,3 +82,8 @@ Recommended way to learn:
 - AI answers should be reviewed before using them in production work.
 - Do not put private company data into tools that are not approved for that data.
 - GenAI usually works best as a helper, not as a fully trusted replacement for human judgment.
+
+## Suggested Path
+
+1. Start with `01_basics_of_genai/`.
+2. Then move to `02_genai_application_fundamentals/` as new chapters are added.
